@@ -2,6 +2,8 @@
 
 Un bot simple pour faire des Questions Pour un Champion sur Discord !
 
+Pour inviter le bot : https://discord.com/api/oauth2/authorize?client_id=781821417729687572&permissions=8&scope=bot
+
 ### Fonctionnalités
 - Sélection des Organisateurs, des Joueurs et des Finaliste
 - Lancement du 9 Point Gagnants
@@ -22,3 +24,8 @@ Un bot simple pour faire des Questions Pour un Champion sur Discord !
 - $qpuc1 -> Cliquer sur un buzzer (Réaction) fera apparaitre un nouveau message avec des réactions, les organisateursla  peuvent valider ou non la réponse donnée
 - $qpuc2 -> Lance 40 sec de timer
 - $qpuc3 -> Lance 40 sec de timer avec un changement de main toutes les 10 sec tant que personne essaye de répondre. Si une réponse est donnée elle peut être validée ce qui coupe court à la question sinon la main est changée et le timer continue
+
+
+### Fichier .env
+ - Le .env doit contenir le prefix de votre commande ainsi que le token de connexion disponible ici : https://discord.com/developers/applications
+ - Si le fichier de script n'est pas à la racine, indiquez l'emplacement du fichier dans la ligne const env = require('dotenv').config('PATH')
