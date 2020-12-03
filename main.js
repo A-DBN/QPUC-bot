@@ -10,6 +10,80 @@ let final = new Array(2);
 let finalId = new Array(2);
 
 
+var Timer = function(callback, delay) {
+  var timerId, start, remaining = delay;
+
+  this.pause = function() {
+      clearTimeout(timerId);
+      remaining -= Date.now() - start;
+  };
+
+  this.resume = function() {
+      start = Date.now();
+      clearTimeout(timerId);
+      timerId = setTimeout(callback, remaining);
+  };
+
+  this.resume();
+};
+
+function faceToFace(msg, timer, interval, hand, handId, clear)
+{
+  msg.channel.send(hand + ' à la main ! Go !').then((message) => {
+    message.react("🔴")
+
+  const filter = (reaction, user) => {
+    return ['🔴'].includes(reaction.emoji.name) && user.id === handId
+  };
+
+  message.awaitReactions(filter, {max: 1})
+      .then((collected) => {
+        const reaction = collected.first();
+        if (reaction.emoji.name === '🔴') {
+          message.channel.send(hand + ' à la main !');
+          timer.pause()
+          if (clear === true){
+            clearInterval(interval)
+            clear = false;
+          }
+        }
+
+
+        message.channel.send('Bonne Réponse ?').then((msgg) => {
+          msgg.react('👍')
+          msgg.react('👎')
+
+          const filterG = (reactionG, user) => {
+            return ['👍', '👎'].includes(reactionG.emoji.name) && arraysMatchOrga(user.id);
+          };
+
+          msgg.awaitReactions(filterG, {max: 1})
+          .then((collecteD) => {
+            const reactionG = collecteD.first();
+            if (reactionG.emoji.name === '👍')
+              msg.channel.send('Fini !');
+            if (reactionG.emoji.name === '👎'){
+              timer.resume();
+              if (hand === final[0]){
+                hand = final[1]
+                handId = finalId[1]
+              }
+              else if (hand === final[1]){
+                hand = final[0]
+                handId = finalId[0]
+              }
+              faceToFace(msg, timer, interval, hand, handId, clear)
+            }
+          });
+        })
+	  })
+	  .catch(collected => {
+	    message.reply('Eror');
+	});
+})
+
+}
+
 function getUserFromMention(mention) {
 	if (!mention) return;
 
@@ -191,47 +265,44 @@ client.on('message', (msg) => {
       }, 4*10000);
     }
 
-		/*if (cmd === `${PREFIX}qpuc3` && member.roles.cache.some(role => role.name === 'Présentateur QPUC')) {
-			const timerObj = setTimeout(() => {
-				msg.channel.send('--------- QPUC ---------').then((message) => {
-					 message.react("🔴")
 
-				const filter = (reaction, user) => {
-					 return ['🔴'].includes(reaction.emoji.name) && arraysMatch(user.id)
-				};
+		if (cmd === `${PREFIX}qpuc3` && member.roles.cache.some(role => role.name === 'Présentateur QPUC')) {
+      // Create Timer with pause resume
+      var timer = new Timer(function() {
+        msg.channel.send("Fini!");
+        clearInterval(interval)
+      }, 40000);
 
-				message.awaitReactions(filter, {max: 1})
-						.then((collected) => {
-							const reaction = collected.first();
-							if (reaction.emoji.name === '🔴') {
-								timerObj.unref();
-								message.channel.send(player[0] + ' à la main');
-							}
+      // Get name and Id of player
+      var hand = args[0];
+      var time = 40
+      var handId = getUserFromMention(args[0]);
+      var clear = true;
 
-								message.channel.send('Bonne Réponse ?').then((msgg) => {
-									msgg.react('👍')
-									msgg.react('👎')
+      // Start Interval
+      let interval = setInterval(() => {
 
-									const filterG = (reactionG, user) => {
-										return ['👍', '👎'].includes(reactionG.emoji.name) && arraysMatchOrga(user.id);
-									};
+        if (hand === final[0]){
+          hand = final[1]
+          handId = finalId[1]
+        }
+        else if (hand === final[1]){
+          hand = final[0]
+          handId = finalId[1]
+        }
+        time -= 10
+        msg.channel.send('⚠️ Changement de main ! Plus que ' + time + ' secondes ! ⚠️' )
+        faceToFace(msg, timer, interval, hand, handId, clear);
+      }, 10000);
 
-									msgg.awaitReactions(filterG, {max: 1})
-									.then((collecteD) => {
-										const reactionG = collecteD.first();
-										if (reactionG.emoji.name === '👍')
-											msg.channel.send('Fini !');
-										if (reactionG.emoji.name === '👎')
-											setImmediate(() => {
-												timerObj.ref();
-											});
-									});
-								})
-							})
-						})
-			}, 4*10000);
-		}*/
+      // Start Timer
+      timer.resume()
+
+      // Msg start
+      faceToFace(msg, timer, interval, hand, handId, clear);
+
+    }
 })
 
 
-client.login(process.env.authkey);
+client.login(process.env.login);
