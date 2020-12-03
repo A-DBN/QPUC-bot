@@ -5,7 +5,7 @@ Un bot simple pour faire des Question Pour un Champion sur Discord !
 ### Fonctionnalités
 - Sélection des Organisateurs, des Joueurs et des Finaliste
 - Lancement du 9 Point Gagnants
-- Lancement du 4 à la suites
+- Lancement du 4 à la suite
 - Lancement du Face à Face
 
 ### Commandes
@@ -19,6 +19,6 @@ Un bot simple pour faire des Question Pour un Champion sur Discord !
 
 ### Utilisation
 - $player -> Attribue 4 couleurs aux 4 joueurs qui seront leur buzzers
-- $qpuc1 -> Cliquer sur un buzzer (Réaction) fera appararaitre un nouveau message avec des réactions, les orga peuvent valider ou non la réponse donné
+- $qpuc1 -> Cliquer sur un buzzer (Réaction) fera apparaitre un nouveau message avec des réactions, les organisateursla  peuvent valider ou non la réponse donnée
 - $qpuc2 -> Lance 40 sec de timer
-- $qpuc3 -> Lance 40 sec de timer avec un changement de main tout les 10 sec tant que personne essaye de répondre. Si une réponse est donné elle peut être validé ce qui coupe court à la question sinon la main est changé et le timer continue
+- $qpuc3 -> Lance 40 sec de timer avec un changement de main toutes les 10 sec tant que personne essaye de répondre. Si une réponse est donnée elle peut être validée ce qui coupe court à la question sinon la main est changée et le timer continue
