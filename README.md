@@ -1,6 +1,6 @@
 ## QPUC-bot
 
-Un bot simple pour faire des Question Pour un Champion sur Discord !
+Un bot simple pour faire des Questions Pour un Champion sur Discord !
 
 ### Fonctionnalités
 - Sélection des Organisateurs, des Joueurs et des Finaliste
