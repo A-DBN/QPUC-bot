@@ -177,8 +177,28 @@ function base(msg)
               msgg.awaitReactions(filterG, {max: 1})
               .then((collecteD) => {
                 const reactionG = collecteD.first();
-                if (reactionG.emoji.name === '👍')
-                  msg.channel.send('Fini !');
+                if (reactionG.emoji.name === '👍') {
+                  msg.channel.send('Fin de la question !');
+                  msg.channel.send('Relancer une question ?').then((next) => {
+                    next.react('👍')
+                    next.react('👎')
+
+                    const filterN = (reactionN, user) => {
+                      return ['👍', '👎'].includes(reactionN.emoji.name) && arraysMatchOrga(user.id);
+                    };
+
+                    next.awaitReactions(filterN, {max: 1})
+                    .then((collectedN) => {
+                      const reactionN = collectedN.first();
+                      if (reactionN.emoji.name === '👍') {
+                        msg.channel.send('Début d\'une nouvelle question');
+                        base(msg);
+                      }
+                      if (reactionN.emoji.name === '👎')
+                        msg.channel.send('Fin du Face à Face');
+                    });
+                  })
+                }
                 if (reactionG.emoji.name === '👎')
                   base(msg);
               });
